@@ -9,74 +9,22 @@ import java.util.stream.Collectors;
 
 public class CalculatorPostFixExpression {
 
-    static Stack<Integer> stack = new Stack<>();
-
-    static int flag = 0;
-
-    static int evaluatePostFix(String expression) {
-        char[] expressionChar = expression.toCharArray();
-        char ch;
-        int i = 0;
-        flag = 0;
-        while ((ch = expressionChar[i++]) != '\n') {
-            if (Character.isDigit(ch)) {
-                push(ch - '0');
-            } else if (ch == ' ') {
-                flag = 0;
-            } else {
-                flag = 0;
-                int val1 = stack.pop();
-                int val2 = stack.pop();
-                switch (ch) {
-                    case '+':
-                        push(val2 + val1);
-                        break;
-
-                    case '-':
-                        push(val2 - val1);
-                        break;
-
-                    case '/':
-                        push(val2 / val1);
-                        break;
-
-                    case '*':
-                        push(val2 * val1);
-                        break;
-                }
-            }
-        }
-        return stack.pop();
-    }
-
-    static BigDecimal evaluatePrefixWithDecimalDigit(String postfixExpression) {
+    static BigDecimal evaluatePostFixExpression(String postfixExpression) {
         String expression = postfixExpression.replaceAll("\\s+", " ");
         List<String> arrayOfString = Arrays
                 .stream(expression.split(" "))
                 .collect(Collectors.toList());
         Stack<BigDecimal> numStack = new Stack<>();
         for (String s : arrayOfString) {
-            System.out.println(s);
             if (isOperation(s.charAt(0))) {
                 BigDecimal num1 = numStack.pop();
                 BigDecimal num2 = numStack.pop();
-                numStack.push(calcValueOfTwoNum(num1, num2, s));
+                numStack.push(calcValueOfTwoNum(num2, num1, s));
             } else {
                 numStack.push(new BigDecimal(s));
             }
         }
         return numStack.peek();
-    }
-
-    private static void push(int elem) {
-        if (flag == 1) {
-            int num;
-            num = stack.pop();
-            stack.push(elem + 10 * num);
-        } else if (flag == 0) {
-            stack.push(elem);
-            flag = 1;
-        }
     }
 
     private static int precedence(char c) {
@@ -116,7 +64,7 @@ public class CalculatorPostFixExpression {
             }
         }
         for (int i = 0; i <= stack.size(); i++) {
-            result.append(stack.pop());
+            result.append(stack.pop()).append(" ");
         }
         return result.toString();
     }

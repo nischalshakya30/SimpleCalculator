@@ -6,14 +6,14 @@ import javax.swing.JOptionPane;
 
 public class Dashboard extends javax.swing.JFrame {
 
-    List<String> histories = new ArrayList<>();
+    private final static List<String> histories = new ArrayList<>();
 
     public Dashboard() {
         initComponents();
     }
 
-    void btnNumber(String number) {
-        textField.setText(textField.getText() + number);
+    private void setCalculation(String number) {
+        calculationTextField.setText(calculationTextField.getText() + number);
     }
 
     @SuppressWarnings("unchecked")
@@ -40,7 +40,7 @@ public class Dashboard extends javax.swing.JFrame {
         btnDelete = new javax.swing.JButton();
         btnEqual = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        textField = new javax.swing.JTextField();
+        calculationTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -273,7 +273,7 @@ public class Dashboard extends javax.swing.JFrame {
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        textField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        calculationTextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         jLabel1.setForeground(new java.awt.Color(0, 51, 255));
         jLabel1.setText("History");
@@ -291,7 +291,7 @@ public class Dashboard extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(textField, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                                        .addComponent(calculationTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                                         .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addGap(0, 0, Short.MAX_VALUE)
                                                 .addComponent(jLabel1)))
@@ -302,7 +302,7 @@ public class Dashboard extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(textField, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(calculationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
         );
 
@@ -332,45 +332,49 @@ public class Dashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEqualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEqualActionPerformed
-        String postFixExpression = CalculatorPostFixExpression.infixToPostFix(textField.getText() + " ");
+        String postFixExpression = CalculatorPostFixExpression.infixToPostFix(calculationTextField.getText() + " ");
         System.out.println(postFixExpression);
-        String result = String.valueOf(CalculatorPostFixExpression.evaluatePrefixWithDecimalDigit(postFixExpression));
-        textField.setText(result);
+        String result = String.valueOf(CalculatorPostFixExpression.evaluatePostFixExpression(postFixExpression));
+        calculationTextField.setText(result);
         histories.add(result);
     }//GEN-LAST:event_btnEqualActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         String delete = null;
-        if (textField.getText().length() > 0) {
-            StringBuilder string = new StringBuilder(textField.getText());
-            if (string.charAt(textField.getText().length() - 1) == '.') {
+        if (calculationTextField.getText().length() > 0) {
+            StringBuilder string = new StringBuilder(calculationTextField.getText());
+            if (string.charAt(calculationTextField.getText().length() - 1) == '.') {
                 isDecimal = false;
             }
-            string.deleteCharAt(textField.getText().length() - 1);
+            string.deleteCharAt(calculationTextField.getText().length() - 1);
             delete = string.toString();
-            textField.setText(delete);
+            calculationTextField.setText(delete);
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        textField.setText(null);
+        calculationTextField.setText(null);
         isDecimal = false;
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        btnNumber(" + ");
+        setCalculation(" + ");
+        isDecimal = false;
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnSubtractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubtractActionPerformed
-        btnNumber(" - ");
+        setCalculation(" - ");
+        isDecimal = false;
     }//GEN-LAST:event_btnSubtractActionPerformed
 
     private void btnMultiplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultiplicationActionPerformed
-        btnNumber(" * ");
+        setCalculation(" * ");
+        isDecimal = false;
     }//GEN-LAST:event_btnMultiplicationActionPerformed
 
     private void btnDivideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDivideActionPerformed
-        btnNumber(" / ");
+        setCalculation(" / ");
+        isDecimal = false;
     }//GEN-LAST:event_btnDivideActionPerformed
 
     private void showMessageDialog(String message) {
@@ -379,57 +383,57 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void btnDotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDotActionPerformed
         if (!isDecimal) {
-            btnNumber(btnDot.getText());
+            setCalculation(btnDot.getText());
             isDecimal = true;
         }
     }//GEN-LAST:event_btnDotActionPerformed
 
     private void btnZeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZeroActionPerformed
-        btnNumber(btnZero.getText());
+        setCalculation(btnZero.getText());
     }//GEN-LAST:event_btnZeroActionPerformed
 
     private void btnNineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNineActionPerformed
-        btnNumber(btnNine.getText());
+        setCalculation(btnNine.getText());
     }//GEN-LAST:event_btnNineActionPerformed
 
     private void btnEightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEightActionPerformed
-        btnNumber(btnEight.getText());
+        setCalculation(btnEight.getText());
     }//GEN-LAST:event_btnEightActionPerformed
 
     private void btnSevenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSevenActionPerformed
-        btnNumber(btnSeven.getText());
+        setCalculation(btnSeven.getText());
     }//GEN-LAST:event_btnSevenActionPerformed
 
     private void btnSixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSixActionPerformed
-        btnNumber(btnSix.getText());
+        setCalculation(btnSix.getText());
     }//GEN-LAST:event_btnSixActionPerformed
 
     private void btnFiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiveActionPerformed
-        btnNumber(btnFive.getText());
+        setCalculation(btnFive.getText());
     }//GEN-LAST:event_btnFiveActionPerformed
 
     private void btnFourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFourActionPerformed
-        btnNumber(btnFour.getText());
+        setCalculation(btnFour.getText());
     }//GEN-LAST:event_btnFourActionPerformed
 
     private void btnThreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThreeActionPerformed
-        btnNumber(btnThree.getText());
+        setCalculation(btnThree.getText());
     }//GEN-LAST:event_btnThreeActionPerformed
 
     private void btnTwoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTwoActionPerformed
-        btnNumber(btnTwo.getText());
+        setCalculation(btnTwo.getText());
     }//GEN-LAST:event_btnTwoActionPerformed
 
     private void btnOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOneActionPerformed
-        btnNumber(btnOne.getText());
+        setCalculation(btnOne.getText());
     }//GEN-LAST:event_btnOneActionPerformed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        String history = "";
+        StringBuilder history = new StringBuilder();
         for (String historyOne : histories) {
-            history += historyOne + "\n";
+            history.append(historyOne).append("\n");
         }
-        showMessageDialog(history);
+        showMessageDialog(history.toString());
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private boolean isDecimal = false;
@@ -455,6 +459,6 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField textField;
+    private javax.swing.JTextField calculationTextField;
     // End of variables declaration//GEN-END:variables
 }
